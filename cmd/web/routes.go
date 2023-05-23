@@ -5,8 +5,8 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
-	"github.com/markhorn-dev/go-bookings-app/pkg/config"
-	"github.com/markhorn-dev/go-bookings-app/pkg/handlers"
+	"github.com/markhorn-dev/go-bookings-app/internal/config"
+	"github.com/markhorn-dev/go-bookings-app/internal/handlers"
 )
 
 func routes(app *config.AppConfig) http.Handler {
@@ -18,14 +18,18 @@ func routes(app *config.AppConfig) http.Handler {
 
 	mux.Get("/", handlers.Repo.Home)
 	mux.Get("/about", handlers.Repo.About)
-	mux.Get("/contact", handlers.Repo.Contact)
-	mux.Get("/availability", handlers.Repo.Availability)
-	mux.Get("/reservation", handlers.Repo.Reservation)
-	mux.Get("/generals-suite", handlers.Repo.GeneralsSuite)
-	mux.Get("/majors-quarters", handlers.Repo.MajorsQuarters)
+	mux.Get("/generals-quarters", handlers.Repo.Generals)
+	mux.Get("/majors-suite", handlers.Repo.Majors)
 
-	mux.Post("/availability", handlers.Repo.PostAvailability)
-	mux.Post("/reservation", handlers.Repo.PostReservation)
+	mux.Get("/search-availability", handlers.Repo.Availability)
+	mux.Post("/search-availability", handlers.Repo.PostAvailability)
+	mux.Post("/search-availability-json", handlers.Repo.AvailabilityJSON)
+
+	mux.Get("/contact", handlers.Repo.Contact)
+
+	mux.Get("/make-reservation", handlers.Repo.Reservation)
+	mux.Post("/make-reservation", handlers.Repo.PostReservation)
+	mux.Get("/reservation-summary", handlers.Repo.ReservationSummary)
 
 	fileServer := http.FileServer(http.Dir("./static/"))
 	mux.Handle("/static/*", http.StripPrefix("/static", fileServer))
